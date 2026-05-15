@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Katalog Produk</title>
+</head>
+<body>
+    <h1>Daftar File Produk</h1>
+    <ul id="product-list">Memuat produk...</ul>
+
+    <script>
+        const repoOwner = 'gmdstore';
+        const repoName = 'produk';
+        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/`;
+
+        fetch(apiUrl)
+            .then(res => res.json())
+            .then(data => {
+                const list = document.getElementById('product-list');
+                list.innerHTML = ''; // Kosongkan loading
+                
+                data.forEach(file => {
+                    // Hanya tampilkan jika file adalah gambar
+                    if(file.name.match(/\.(jpg|jpeg|png|webp)$/i)) {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<a href="${file.name}" target="_blank">${file.name}</a>`;
+                        list.appendChild(li);
+                    }
+                });
+            })
+            .catch(err => console.error('Gagal memuat data:', err));
+    </script>
+</body>
+</html>
